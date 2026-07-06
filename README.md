@@ -1,2 +1,2 @@
 # kelompok-6
-pendaftaran web design
+materi nya : pendaftaran lomba web design 
