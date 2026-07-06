@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendaftaran Lomba Web Design</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+header{
+    background:#1565c0;
+    color:white;
+    padding:30px;
+    text-align:center;
+}
+
+header p{
+    margin-top:10px;
+}
+
+.filter{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+    padding:20px;
+}
+
+.filter input,
+.filter select{
+    padding:10px;
+    width:250px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+#listLomba{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    padding:20px;
+    box-shadow:0 5px 10px rgba(0,0,0,.15);
+}
+
+.card h3{
+    color:#1565c0;
+    margin-bottom:10px;
+}
+
+.card p{
+    margin:6px 0;
+}
+
+form{
+    background:white;
+    width:90%;
+    max-width:700px;
+    margin:30px auto;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 5px 10px rgba(0,0,0,.15);
+}
+
+form h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-top:15px;
+}
+
+input,select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+}
+
+button{
+    margin-top:20px;
+    width:100%;
+    padding:12px;
+    background:#1565c0;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#0d47a1;
+}
+
+#hasil{
+    width:90%;
+    max-width:700px;
+    margin:20px auto;
+    background:#dcedc8;
+    padding:20px;
+    border-radius:10px;
+    display:none;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+
+<h1>Pendaftaran Lomba Web Design</h1>
+
+<p>Website Informasi dan Pendaftaran Lomba Tingkat Mahasiswa</p>
+
+</header>
+
+<div class="filter">
+
+<input type="text" id="search" placeholder="Cari Nama Lomba">
+
+<select id="kategori">
+
+<option value="">Semua Kategori</option>
+
+<option>Individu</option>
+
+<option>Tim</option>
+
+<option>Frontend</option>
+
+</select>
+
+<select id="status">
+
+<option value="">Semua Status</option>
+
+<option>Dibuka</option>
+
+<option>Ditutup</option>
+
+</select>
+
+</div>
+
+<section id="listLomba"></section>
+
+<form id="form">
+
+<h2>Form Pendaftaran</h2>
+
+<label>Nama Ketua</label>
+
+<input type="text" id="ketua">
+
+<label>NIM</label>
+
+<input type="text" id="nim">
+
+<label>Email</label>
+
+<input type="email" id="email">
+
+<label>Nama Tim</label>
+
+<input type="text" id="tim">
+
+<p>Jumlah Karakter : <b id="jumlah">0</b></p>
+
+<label>Kategori</label>
+
+<select id="pilihKategori">
+
+<option value="">Pilih Kategori</option>
+
+<option>Individu</option>
+
+<option>Tim</option>
+
+<option>Frontend</option>
+
+</select>
+
+<br>
+
+<label>
+
+<input type="checkbox" id="setuju" style="width:auto">
+
+Saya menyetujui syarat dan ketentuan lomba.
+
+</label>
+
+<button type="submit">Daftar</button>
+
+</form>
+
+<div id="hasil"></div>
+
+<script>
+
+const data=[
+
+{
+id:1,
+namaLomba:"Web Design Competition 2026",
+kategori:"Tim",
+tanggal:"2026-08-20",
+deadline:"2026-08-10",
+biaya:50000,
+status:"Dibuka",
+deskripsi:"Kompetisi pembuatan website modern."
+},
+
+{
+id:2,
+namaLomba:"UI UX Challenge",
+kategori:"Individu",
+tanggal:"2026-09-10",
+deadline:"2026-08-30",
+biaya:25000,
+status:"Dibuka",
+deskripsi:"Kompetisi desain antarmuka aplikasi."
+},
+
+{
+id:3,
+namaLomba:"Frontend Battle",
+kategori:"Frontend",
+tanggal:"2026-10-05",
+deadline:"2026-09-25",
+biaya:0,
+status:"Ditutup",
+deskripsi:"Kompetisi HTML CSS JavaScript."
+}
+
+];
+
+function tampil(list){
+
+let html="";
+
+list.forEach(item=>{
+
+let sekarang=new Date();
+
+let deadline=new Date(item.deadline);
+
+let selisih=Math.ceil((deadline-sekarang)/(1000*60*60*24));
+
+if(selisih<0){
+selisih="Deadline Berakhir";
+}else{
+selisih+=" Hari Lagi";
+}
+
+html+=`
+
+<div class="card">
+
+<h3>${item.namaLomba}</h3>
+
+<p><b>Kategori :</b> ${item.kategori}</p>
+
+<p><b>Tanggal :</b> ${item.tanggal}</p>
+
+<p><b>Deadline :</b> ${item.deadline}</p>
+
+<p><b>Biaya :</b> Rp ${item.biaya.toLocaleString()}</p>
+
+<p><b>Status :</b> ${item.status}</p>
+
+<p>${item.deskripsi}</p>
+
+<p><b>Countdown :</b> ${selisih}</p>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("listLomba").innerHTML=html;
+
+}
+
+tampil(data);
+
+document.getElementById("search").addEventListener("keyup",filter);
+
+document.getElementById("kategori").addEventListener("change",filter);
+
+document.getElementById("status").addEventListener("change",filter);
+
+function filter(){
+
+const cari=document.getElementById("search").value.toLowerCase();
+
+const kategori=document.getElementById("kategori").value;
+
+const status=document.getElementById("status").value;
+
+const hasil=data.filter(item=>{
+
+return item.namaLomba.toLowerCase().includes(cari)
+
+&& (kategori=="" || item.kategori==kategori)
+
+&& (status=="" || item.status==status);
+
+});
+
+tampil(hasil);
+
+}
+
+document.getElementById("tim").addEventListener("keyup",function(){
+
+document.getElementById("jumlah").innerHTML=this.value.length;
+
+});
+
+document.getElementById("form").addEventListener("submit",function(e){
+
+e.preventDefault();
+
+const ketua=document.getElementById("ketua").value.trim();
+
+const nim=document.getElementById("nim").value.trim();
+
+const email=document.getElementById("email").value.trim();
+
+const tim=document.getElementById("tim").value.trim();
+
+const kategori=document.getElementById("pilihKategori").value;
+
+const setuju=document.getElementById("setuju").checked;
+
+if(ketua==""){
+alert("Nama Ketua wajib diisi");
+return;
+}
+
+if(nim=="" || isNaN(nim)){
+alert("NIM harus berupa angka");
+return;
+}
+
+const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if(!emailRegex.test(email)){
+alert("Email tidak valid");
+return;
+}
+
+if(tim==""){
+alert("Nama Tim wajib diisi");
+return;
+}
+
+if(kategori==""){
+alert("Silakan pilih kategori");
+return;
+}
+
+if(!setuju){
+alert("Centang persetujuan.");
+return;
+}
+
+const nomor="LMB-"+Math.floor(Math.random()*90000+10000);
+
+const hasil=document.getElementById("hasil");
+
+hasil.style.display="block";
+
+hasil.innerHTML=`
+
+<h2>Pendaftaran Berhasil</h2>
+
+<hr><br>
+
+<p><b>Nomor Pendaftaran :</b> ${nomor}</p>
+
+<p><b>Nama Ketua :</b> ${ketua}</p>
+
+<p><b>NIM :</b> ${nim}</p>
+
+<p><b>Email :</b> ${email}</p>
+
+<p><b>Nama Tim :</b> ${tim}</p>
+
+<p><b>Kategori :</b> ${kategori}</p>
+
+`;
+
+this.reset();
+
+document.getElementById("jumlah").innerHTML="0";
+
+});
+
+</script>
+
+</body>
+</html>
